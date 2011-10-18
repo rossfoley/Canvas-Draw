@@ -1,5 +1,6 @@
 #draw_canvas {
   border: 1px solid black;
+  float: left;
 }
 
 #tools_section ul {
@@ -25,3 +26,15 @@
 #tools_section a.active_tool {
   font-weight: bold;
 }
+
+#style_section {
+  float: left;
+  margin-left: 10px;
+  height: 500px;
+  width: 300px;
+  border: 1px solid black;
+}
+
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { *zoom: 1; }
