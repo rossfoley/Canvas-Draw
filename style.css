@@ -1,0 +1,27 @@
+#draw_canvas {
+  border: 1px solid black;
+}
+
+#tools_section ul {
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid black;
+  display: block;
+  width: 490px;
+}
+
+#tools_section li {
+  display: inline;
+  list-style: none;
+}
+
+#tools_section a, #tools_section a:active, #tools_section a:visited {
+  color: blue;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+#tools_section a.active_tool {
+  font-weight: bold;
+}
