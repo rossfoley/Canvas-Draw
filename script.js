@@ -3,6 +3,7 @@ var canvas = document.getElementById("draw_canvas"),
     toolStarted = false,
     firstClickCoord,
     backgroundCanvasPixels,
+    active_tool,
     tools = $("#tools_section a");
 
 var line = {
@@ -36,11 +37,13 @@ var circle = {
   }
 };
 
-var active_tool = line;
 
 $(window).ready(function() {
   var jquery_canvas = $("#draw_canvas");
-  setCanvasStyles();
+  active_tool = line;
+
+  initializeCanvasStyles();
+
   tools.click(toolClicked);
   jquery_canvas.click(clickOnCanvas)
   jquery_canvas.mousemove(mouseMovedOnCanvas);
@@ -81,6 +84,17 @@ function toolClicked(e) {
   }
 }
 
+function applyFilterToCanvas(filterFunction) {
+  var canvasPixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  
+  for (var i = 0; i < pixels.data.length; i += 4) {
+    var newPixel = filterFunction(currentPixels.slice(i, i+4));
+    currentPixels.splice(i, 4, newPixel[0], newPixel[1], newPixel[2], newPixel[3]);
+  }
+
+  ctx.putImageData(canvasPixels, 0, 0);
+}
+
 function mouseMovedOnCanvas(e) {
   var clickCoord = getCursorPosition(e);
   if (toolStarted) {
@@ -110,7 +124,7 @@ function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function setCanvasStyles() {
+function initializeCanvasStyles() {
   ctx.strokeStyle = "#00f";
   ctx.lineWidth = 2;
 }
