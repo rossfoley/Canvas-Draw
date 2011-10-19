@@ -4,7 +4,7 @@ var canvas = document.getElementById("draw_canvas"),
     firstClickCoord,
     backgroundCanvasPixels,
     active_tool,
-    tools = $("#tools_section a");
+    tools_section = $("#tools_section a");
 
 var line = {
   name: "Line Tool",
@@ -37,6 +37,17 @@ var circle = {
   }
 };
 
+var filters = {
+  invert: function(pixel) {
+    var newPixel = pixel;
+    
+    for (var i = 0; i < 3; i++) {
+      newPixel[i] = 255 - newPixel[i]
+    }
+
+    return newPixel;
+  }
+};
 
 $(window).ready(function() {
   var jquery_canvas = $("#draw_canvas");
@@ -44,14 +55,21 @@ $(window).ready(function() {
 
   initializeCanvasStyles();
 
-  tools.click(toolClicked);
+  tools_section.click(toolClicked);
   jquery_canvas.click(clickOnCanvas)
   jquery_canvas.mousemove(mouseMovedOnCanvas);
+
+  var img = document.createElement("img");
+  img.onload = function() {
+    ctx.drawImage(img, 0, 0);
+    applyFilterToCanvas(filters.invert);
+  }
+  img.src = "cat.jpg";
 });
 
 function toolClicked(e) {
   var previous_tool = $(".active_tool");
-  tools.removeClass("active_tool");
+  tools_section.removeClass("active_tool");
   $(this).addClass("active_tool");
   toolStarted = false;
 
@@ -81,15 +99,25 @@ function toolClicked(e) {
       $(this).removeClass("active_tool");
       previous_tool.addClass("active_tool");
       break;
+
+    case "invert_pixels":
+      applyFilterToCanvas(filters.invert);
+      $(this).removeClass("active_tool");
+      previous_tool.addClass("active_tool");
+      break;
   }
 }
 
 function applyFilterToCanvas(filterFunction) {
-  var canvasPixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  var canvasPixels = ctx.getImageData(0, 0, canvas.width, canvas.height),
+      pixelArray = canvasPixels.data;
   
-  for (var i = 0; i < pixels.data.length; i += 4) {
-    var newPixel = filterFunction(currentPixels.slice(i, i+4));
-    currentPixels.splice(i, 4, newPixel[0], newPixel[1], newPixel[2], newPixel[3]);
+  for (var i = 0; i < pixelArray.length; i += 4) {
+    var newPixel = filterFunction([pixelArray[i], pixelArray[i+1], pixelArray[i+2], pixelArray[i+3]]);
+
+    for (var j = 0; j < 4; j++) {
+      pixelArray[i+j] = newPixel[j];
+    }
   }
 
   ctx.putImageData(canvasPixels, 0, 0);
