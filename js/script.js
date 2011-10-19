@@ -1,10 +1,13 @@
 var canvas = document.getElementById("draw_canvas"),
     ctx = canvas.getContext("2d"),
+    tools_section = $("#tools a"),
+    commands_section = $("#commands"),
+    filters_section = $("#filters"),
+    styling_section = $("#styling_options"),
     toolStarted = false,
     firstClickCoord,
     backgroundCanvasPixels,
-    active_tool,
-    tools_section = $("#tools_section a");
+    active_tool;
 
 var line = {
   name: "Line Tool",
@@ -56,19 +59,14 @@ $(window).ready(function() {
   initializeCanvasStyles();
 
   tools_section.click(toolClicked);
+  commands_section.click(commandClicked);
+  filters_section.click(filterClicked);
+
   jquery_canvas.click(clickOnCanvas)
   jquery_canvas.mousemove(mouseMovedOnCanvas);
-
-  var img = document.createElement("img");
-  img.onload = function() {
-    ctx.drawImage(img, 0, 0);
-    applyFilterToCanvas(filters.invert);
-  }
-  img.src = "cat.jpg";
 });
 
 function toolClicked(e) {
-  var previous_tool = $(".active_tool");
   tools_section.removeClass("active_tool");
   $(this).addClass("active_tool");
   toolStarted = false;
@@ -85,25 +83,26 @@ function toolClicked(e) {
     case "circle":
       active_tool = circle;
       break;
+  }
+}
 
+function commandClicked(e) {
+  switch (e.target.id) {
     case "clear_canvas":
-      if (confirm("Are you sure you want to clear the canvas?")) {
+      if (confirm("Are you sure you want to clear the canvas?"))
         clearCanvas();
-        $(this).removeClass("active_tool");
-        previous_tool.addClass("active_tool");
-      }
       break;
 
     case "save_image":
       window.location = ctx.canvas.toDataURL('image/png');
-      $(this).removeClass("active_tool");
-      previous_tool.addClass("active_tool");
       break;
+  }
+}
 
+function filterClicked(e) {
+  switch (e.target.id) {
     case "invert_pixels":
       applyFilterToCanvas(filters.invert);
-      $(this).removeClass("active_tool");
-      previous_tool.addClass("active_tool");
       break;
   }
 }

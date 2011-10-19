@@ -3,34 +3,42 @@
   float: left;
 }
 
-#tools_section ul {
-  margin: 0;
-  margin-bottom: 10px;
-  padding: 5px;
-  border: 1px solid black;
-  display: block;
-  width: 490px;
+#panels {
+  float: left;
+  margin-left: 10px;
+  overflow: hidden;
 }
 
-#tools_section li {
+.panel {
+  margin: 0;
+  margin-bottom: 10px;
+  border: 1px solid black;
+  display: block;
+  width: 300px;
+}
+
+.panel ul {
+  padding: 0;
+  margin: 0;
+}
+
+.panel li {
   display: inline;
   list-style: none;
 }
 
-#tools_section a, #tools_section a:active, #tools_section a:visited {
+.panel a, .panel a:active, .panel a:visited {
   color: blue;
   text-decoration: none;
   margin-right: 10px;
 }
 
-#tools_section a.active_tool {
+#tools a.active_tool {
   font-weight: bold;
 }
 
-#style_section {
-  float: left;
-  margin-left: 10px;
-  height: 500px;
+#styling_options {
+  height: 200px;
   width: 300px;
   border: 1px solid black;
 }

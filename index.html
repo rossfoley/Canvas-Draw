@@ -2,34 +2,45 @@
 <html>
 <head>
   <meta charset="utf-8">
-
   <title>Draw - Canvas Demo</title>
-  <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 </head>
 <body>
   <h1>Canvas Draw</h1>
-  <section id="tools_section">
-    <ul>
-      <li><a href="#" id="line" class="active_tool">Line</a></li>
-      <li><a href="#" id="rectangle">Rectangle</a></li>
-      <li><a href="#" id="circle">Circle</a></li>
-    </ul>
-    <ul>
-      <li><a href="#" id="clear_canvas">Clear</a></li>
-      <li><a href="#" id="save_image">Save</a></li>
-      <li><a href="#" id="invert_pixels">Invert</a></li>
-    </ul>
-  </section>
   <canvas id="draw_canvas" width="500" height="500"></canvas>
-  <section id="style_section" class="clearfix">
-    <label for="fill_color">Fill Color</label>
-    <input type="color" name="fill_color" /><br />
-    <label for="stroke_color">Stroke Color</label>
-    <input type="color" name="stroke_color" /><br />
-    <label for="line_width">Line Width</label>
-    <input type="number" min="1" max="10" step="1" name="line_width" /><br />
+  <section id="panels" class="clearfix">
+    <fieldset class="panel" id="tools">
+      <legend>Tools</legend>
+      <ul>
+        <li><a href="#" id="line" class="active_tool">Line</a></li>
+        <li><a href="#" id="rectangle">Rectangle</a></li>
+        <li><a href="#" id="circle">Circle</a></li>
+      </ul>
+    </fieldset>
+    <fieldset class="panel" id="commands">
+      <legend>Commands</legend>
+      <ul>
+        <li><a href="#" id="clear_canvas">Clear</a></li>
+        <li><a href="#" id="save_image">Save</a></li>
+      </ul>
+    </fieldset>
+    <fieldset class="panel" id="filters">
+      <legend>Filters</legend>
+      <ul>
+        <li><a href="#" id="invert_pixels">Invert</a></li>
+      </ul>
+    </fieldset>
+    <fieldset class="panel" id="styling_options">
+      <legend>Styling Options</legend>
+      <label for="fill_color">Fill Color</label>
+      <input type="color" name="fill_color" /><br />
+      <label for="stroke_color">Stroke Color</label>
+      <input type="color" name="stroke_color" /><br />
+      <label for="line_width">Line Width</label>
+      <input type="number" min="1" max="10" step="1" name="line_width" /><br />
+    </fieldset>
   </section>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
