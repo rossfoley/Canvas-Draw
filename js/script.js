@@ -1,13 +1,40 @@
 var canvas = document.getElementById("draw_canvas"),
     ctx = canvas.getContext("2d"),
     tools_section = $("#tools a"),
-    commands_section = $("#commands"),
-    filters_section = $("#filters"),
+    commands_section = $("#commands a"),
+    filters_section = $("#filters a"),
     styling_section = $("#styling_options"),
     toolStarted = false,
     firstClickCoord,
     backgroundCanvasPixels,
     active_tool;
+
+$(document).ready(function() {
+  var jquery_canvas = $("#draw_canvas");
+  active_tool = line;
+
+  $("#styling_options input[name='fill_color']").blur(function() {
+    ctx.fillStyle = $(this).val();
+  });
+
+  $("#styling_options input[name='stroke_color']").blur(function() {
+    ctx.strokeStyle = $(this).val();
+  });
+
+  $("#styling_options input[name='line_width']").bind("change", function() {
+    ctx.lineWidth = parseInt($(this).val());
+    $(this).siblings("#line_width").html($(this).val());
+  });
+
+  initializeCanvasStyles();
+
+  tools_section.click(toolClicked);
+  commands_section.click(commandClicked);
+  filters_section.click(filterClicked);
+
+  jquery_canvas.click(clickOnCanvas)
+  jquery_canvas.mousemove(mouseMovedOnCanvas);
+});
 
 var line = {
   name: "Line Tool",
@@ -43,35 +70,29 @@ var circle = {
 var filters = {
   invert: function(pixel) {
     var newPixel = pixel;
-    
-    for (var i = 0; i < 3; i++) {
-      newPixel[i] = 255 - newPixel[i]
-    }
 
+    for (var i = 0; i < 3; i++) {
+      newPixel[i] = 255 - newPixel[i];
+    }
+    return newPixel;
+  },
+  grayscale: function(pixel) {
+    var newPixel = pixel,
+        intensity = 0.2989*pixel[0] + 0.5870*pixel[1] + 0.1140*pixel[2];
+
+    for (var i = 0; i < 3; i++) {
+      newPixel[i] = intensity;
+    }
     return newPixel;
   }
 };
-
-$(window).ready(function() {
-  var jquery_canvas = $("#draw_canvas");
-  active_tool = line;
-
-  initializeCanvasStyles();
-
-  tools_section.click(toolClicked);
-  commands_section.click(commandClicked);
-  filters_section.click(filterClicked);
-
-  jquery_canvas.click(clickOnCanvas)
-  jquery_canvas.mousemove(mouseMovedOnCanvas);
-});
 
 function toolClicked(e) {
   tools_section.removeClass("active_tool");
   $(this).addClass("active_tool");
   toolStarted = false;
 
-  switch (e.target.id) {
+  switch ($(this).attr("id")) {
     case "line":
       active_tool = line;
       break;
@@ -84,10 +105,11 @@ function toolClicked(e) {
       active_tool = circle;
       break;
   }
+  return false;
 }
 
 function commandClicked(e) {
-  switch (e.target.id) {
+  switch ($(this).attr("id")) {
     case "clear_canvas":
       if (confirm("Are you sure you want to clear the canvas?"))
         clearCanvas();
@@ -97,14 +119,19 @@ function commandClicked(e) {
       window.location = ctx.canvas.toDataURL('image/png');
       break;
   }
+  return false;
 }
 
 function filterClicked(e) {
-  switch (e.target.id) {
+  switch ($(this).attr("id")) {
     case "invert_pixels":
       applyFilterToCanvas(filters.invert);
       break;
+    case "grayscale":
+      applyFilterToCanvas(filters.grayscale);
+      break;
   }
+  return false;
 }
 
 function applyFilterToCanvas(filterFunction) {
@@ -152,8 +179,7 @@ function clearCanvas() {
 }
 
 function initializeCanvasStyles() {
-  ctx.strokeStyle = "#00f";
-  ctx.lineWidth = 2;
+  $("#styling_options input").blur().trigger("change");
 }
 
 function getCursorPosition(e) {
